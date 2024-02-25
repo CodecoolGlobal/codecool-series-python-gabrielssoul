@@ -1,56 +1,68 @@
-{% extends "layout.html" %}
+{% extends 'layout.html' %}
+
 {% block content %}
+
     <div class="card">
-        This is an example for a table:
+        This is most rated shows list:
         <table>
             <thead>
             <tr>
-                <th>Title</th>
-                <th>Release year</th>
-                <th>Average Runtime Length</th>
-                <th>Rating</th>
+                <th>Title
+                    <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'title', order='asc') }}">⇩</a>
+                    <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'title', order='desc') }}">⇧</a>
+                </th>
+                <th>Release year
+                    <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'year', order='asc') }}">⇩</a>
+                    <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'year', order='desc') }}">⇧</a></th>
+                <th>Average runtime length
+                <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'runtime', order='asc') }}">⇩</a>
+                    <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'runtime', order='desc') }}">⇧</a></th>
+                <th>Rating
+                <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'rating', order='asc') }}">⇩</a>
+                    <a href="{{ url_for('shows_most_rated', page = current_page, sort = 'rating', order='desc') }}">⇧</a></th>
                 <th>Genres</th>
+                <th>Homepage</th>
                 <th>Trailer</th>
-{#                <th class="action-column">e</th>#}
             </tr>
             </thead>
             <tbody>
-                {% for show in shows %}
-                    <tr>
-                        <td>{{ show['title'] }}</td>
-                        <td>{{ show['year'] }}</td>
-                        <td>{{ show['runtime'] }}</td>
-                        <td>{{ show['rating'] }}</td>
-                        <td>{{ show['genres'] }}</td>
-                        <td>{{ show['trailer'] }}</td>
-                    </tr>
-                {% endfor %}
+            {% for show in shows %}
+                <tr>
+                    <td>{{ show.title }}</td>
+                    <td>{{ show.year }}</td>
+                    <td>{{ show.runtime }}</td>
+                    <td>{{ show.rating }}</td>
+                    <td>{{ show.genre }}</td>
+                    <td><a href="{{ show.homepage }}">{{ show.homepage }}</a></td>
+                    <td><a href="{{ show.trailer }}">{{ show.trailer }}</a></td>
+                </tr>
+            {% endfor %}
             </tbody>
-        </table>
 
-        {% if current_page>1 %}
-            <a href="{{ url_for('shows_most_rated', page_num=current_page-1) }}">&laquo;</a>
+        </table>
+        {% if current_page > 1 %}
+            <a href="{{ url_for('shows_most_rated', page = current_page - 1, sort = sort, order=order) }}">&laquo;</a>
         {% else %}
             &laquo;
         {% endif %}
 
-        {% for number in range(from_num, to_num + 1) %}
-
-
-
-            {% if number!=current_page %}
-                <a href="{{ url_for('shows_most_rated', page_num=number) }}">{{ number }}</a>
-            {% else %}
-                ({{ number }})
-            {% endif %}
-
+        {% for i in range(from_num,to_num) %}
+            <a href="{{ url_for('shows_most_rated', page = i, sort = sort, order=order) }}">
+                {% if i==current_page %}
+                    ({{ i }})
+                {% else %}
+                    {{ i }}
+                {% endif %}
+            </a>
         {% endfor %}
 
-        {% if current_page!=num %}
-            <a href="{{ url_for('shows_most_rated', page_num=current_page+1) }}">&raquo;</a>
+        {% if current_page != num %}
+            <a href="{{ url_for('shows_most_rated', page = current_page + 1, sort = sort, order=order) }}">&raquo;</a>
         {% else %}
             &raquo;
         {% endif %}
 
+
     </div>
+
 {% endblock %}
